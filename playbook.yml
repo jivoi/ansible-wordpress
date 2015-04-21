@@ -1,0 +1,15 @@
+- hosts: wordpress
+  accelerate: true
+  sudo: yes
+  vars:
+    - domain: "wp-example.com"
+    - download_url: "http://wordpress.org/latest.tar.gz"
+    - wpdirectory: "/var/www"
+  vars_files:
+    - vars/secretvars.yml
+  roles:
+  - { role: nginx }
+  - { role: percona-mysql }
+  - { role: memcached }
+  - { role: php5 }
+  - { role: wordpress }
