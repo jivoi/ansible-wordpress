@@ -1,0 +1,18 @@
+Options +FollowSymLinks -Indexes
+RewriteCond %{QUERY_STRING} base64_encode[^(]*\([^)]*\) [OR] заблокирует ссылки, содержащие кодировку Base64. Избавиться от ссылок, содержащих тег <script>:
+RewriteCond %{QUERY_STRING} (<|%3C)([^s]*s)+cript.*(>|%3E) [NC,OR]
+
+RewriteCond %{QUERY_STRING} GLOBALS (=|\[|\%[0-9A-Z]{0,2}) [OR]
+RewriteCond %{QUERY_STRING} _REQUEST (=|\[|\%[0-9A-Z]{0,2})
+
+RewriteCond %{query_string} concat.*\( [NC,OR]
+RewriteCond %{query_string} union.*select.*\( [NC,OR]
+RewriteCond %{query_string} union.*all.*select [NC]
+RewriteRule ^(.*)$ index.php [F,L]
+
+SetEnvIf user-agent «Indy Library» stayout=1
+SetEnvIf user-agent «libwww-perl» stayout=1
+SetEnvIf user-agent «Wget» stayout=1
+deny from env=stayout
+
+
